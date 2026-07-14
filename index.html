@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veluru Sushma Swaraj — Java Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1425;
+    --bg-raised:#221b31;
+    --bg-card:#241d35;
+    --line:#3a2f4d;
+    --ink:#efe9f5;
+    --ink-dim:#a79cc0;
+    --gold:#d4af6a;
+    --teal:#5fb3a3;
+    --radius:6px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter', sans-serif; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk', sans-serif; font-weight:600; line-height:1.15;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--gold); color:#1a1425;}
+  img{max-width:100%; display:block;}
+  section{padding:100px 7vw; border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--teal); margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:""; width:16px; height:1px; background:var(--teal); display:inline-block;}
+  .section-head{max-width:640px; margin-bottom:50px;}
+  .section-head h2{font-size:clamp(28px,3.2vw,42px);}
+  .section-head p{color:var(--ink-dim); margin-top:14px; font-size:16px;}
+
+  /* ---- NAV ---- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(26,20,37,0.9); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 7vw;
+  }
+  .logo{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:17px; letter-spacing:.02em;}
+  .logo span{color:var(--gold);}
+  nav.links{display:flex; gap:28px; font-size:14px; color:var(--ink-dim);}
+  nav.links a:hover{color:var(--ink);}
+  .nav-cta{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; padding:10px 18px;
+    background:var(--gold); color:#1a1425; border-radius:var(--radius); font-weight:500;
+  }
+  .nav-toggle{display:none; flex-direction:column; gap:4px; cursor:pointer; background:none; border:none;}
+  .nav-toggle span{width:22px; height:2px; background:var(--ink);}
+
+  /* ---- HERO ---- */
+  .hero{
+    display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:center;
+    padding-top:70px; padding-bottom:60px; min-height:calc(100vh - 65px);
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace;
+    font-size:12px; padding:8px 14px; border:1px solid var(--line); border-radius:100px; color:var(--ink-dim);
+    margin-bottom:26px;
+  }
+  .badge .pulse{width:7px; height:7px; border-radius:50%; background:var(--teal); position:relative;}
+  .badge .pulse::after{
+    content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--teal);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%{transform:scale(.6); opacity:1;} 100%{transform:scale(1.8); opacity:0;}}
+  .hero h1{font-size:clamp(36px,4.6vw,60px); letter-spacing:-.01em;}
+  .hero h1 .role{color:var(--gold);}
+  .hero .subline{font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--ink-dim); margin:18px 0 22px;}
+  .hero p.desc{max-width:56ch; color:var(--ink-dim); font-size:16px; margin-bottom:32px;}
+  .btn-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; padding:13px 22px;
+    border-radius:var(--radius); border:1px solid var(--line); transition:.2s;
+  }
+  .btn.primary{background:var(--gold); color:#1a1425; border-color:var(--gold); font-weight:500;}
+  .btn.primary:hover{background:#e3c07f;}
+  .btn.ghost:hover{border-color:var(--teal); color:var(--teal);}
+
+  .hero-portrait{position:relative;}
+  .portrait-frame{
+    aspect-ratio:1/1; border-radius:var(--radius); overflow:hidden; background:var(--bg-raised);
+    border:1px solid var(--line); position:relative;
+  }
+  .portrait-frame img{width:100%; height:100%; object-fit:cover;}
+  .portrait-frame .placeholder{
+    height:100%; display:flex; align-items:center; justify-content:center; text-align:center;
+    color:var(--ink-dim); font-family:'IBM Plex Mono', monospace; font-size:13px; padding:20px;
+  }
+  .scroll-cue{
+    position:absolute; bottom:-40px; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.15em; color:var(--ink-dim);
+  }
+
+  /* ---- STATS STRIP ---- */
+  .stats-strip{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+  }
+  .stat-cell{padding:26px 20px; text-align:center; border-right:1px solid var(--line); background:var(--bg-raised);}
+  .stat-cell:last-child{border-right:none;}
+  .stat-num{font-family:'Space Grotesk', sans-serif; font-size:34px; font-weight:700; color:var(--gold);}
+  .stat-label{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); margin-top:6px;}
+
+  /* ---- ABOUT ---- */
+  .about-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:70px; align-items:start;}
+  .about-grid p{color:var(--ink-dim); margin-bottom:16px; max-width:60ch;}
+  .about-grid strong{color:var(--ink); font-weight:600;}
+
+  /* ---- SKILLS ---- */
+  .skill-groups{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  .skill-group{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:24px;}
+  .skill-group h4{font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:14px;}
+  .skill-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .skill-tag{font-size:13px; padding:6px 12px; background:var(--bg-raised); border:1px solid var(--line); border-radius:100px;}
+
+  /* ---- SERVICES ---- */
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .service-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:28px; transition:.2s;}
+  .service-card:hover{border-color:var(--gold); transform:translateY(-4px);}
+  .service-icon{font-size:26px; margin-bottom:16px;}
+  .service-card h3{font-size:19px; margin-bottom:10px;}
+  .service-card p{color:var(--ink-dim); font-size:14px; margin-bottom:16px;}
+  .service-tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .service-tags span{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--teal); border:1px solid var(--line); padding:4px 8px; border-radius:100px;}
+
+  /* ---- TIMELINE CAROUSEL (education / experience) ---- */
+  .timeline-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;}
+  .carousel-arrows{display:flex; gap:10px;}
+  .arrow-btn{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--bg-card);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink); font-size:16px;
+    transition:.2s;
+  }
+  .arrow-btn:hover{border-color:var(--gold); color:var(--gold);}
+  .carousel-track{display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:8px; scrollbar-width:none;}
+  .carousel-track::-webkit-scrollbar{display:none;}
+  .timeline-card{
+    min-width:340px; scroll-snap-align:start; background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--radius); padding:26px;
+  }
+  .timeline-card .status-pill{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px; padding:4px 10px;
+    border-radius:100px; background:var(--bg-raised); color:var(--teal); margin-bottom:14px;
+  }
+  .timeline-card h4{font-size:17px; margin-bottom:4px;}
+  .timeline-card .org{color:var(--ink-dim); font-size:13px; margin-bottom:14px;}
+  .timeline-card p{color:var(--ink-dim); font-size:14px; margin-bottom:14px;}
+  .timeline-card .meta{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); margin-bottom:12px; display:flex; gap:14px; flex-wrap:wrap;}
+  .timeline-card .cert-link{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--gold);}
+
+  /* ---- PROJECTS ---- */
+  .filter-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px;}
+  .filter-pill{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; padding:9px 16px; border-radius:100px;
+    border:1px solid var(--line); color:var(--ink-dim); cursor:pointer; background:transparent; transition:.2s;
+  }
+  .filter-pill.active, .filter-pill:hover{border-color:var(--gold); color:var(--gold);}
+  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:24px;}
+  .project-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; transition:.2s;}
+  .project-card:hover{border-color:var(--teal); transform:translateY(-4px);}
+  .project-thumb{aspect-ratio:16/10; background:var(--bg-raised); display:flex; align-items:center; justify-content:center; color:var(--ink-dim); font-family:'IBM Plex Mono', monospace; font-size:12px; border-bottom:1px solid var(--line); overflow:hidden;}
+  .project-thumb img{width:100%; height:100%; object-fit:cover;}
+  .project-body{padding:22px;}
+  .project-cat{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--gold); margin-bottom:8px; text-transform:uppercase;}
+  .project-body h3{font-size:18px; margin-bottom:8px;}
+  .project-body p{color:var(--ink-dim); font-size:14px; margin-bottom:14px;}
+  .project-body .stack{display:flex; flex-wrap:wrap; gap:6px;}
+  .project-body .stack span{font-size:11px; font-family:'IBM Plex Mono', monospace; color:var(--ink-dim); border:1px solid var(--line); padding:3px 8px; border-radius:100px;}
+
+  /* ---- ACHIEVEMENTS ---- */
+  .achieve-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .achieve-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; text-align:center;}
+  .achieve-card .emoji{font-size:28px; margin-bottom:12px;}
+  .achieve-card h4{font-size:15px; margin-bottom:8px;}
+  .achieve-card p{color:var(--ink-dim); font-size:13px;}
+
+  /* ---- CONTACT ---- */
+  .contact-wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:70px;}
+  .field{margin-bottom:20px;}
+  .field label{display:block; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); margin-bottom:8px;}
+  .field input, .field textarea{
+    width:100%; background:var(--bg-card); border:1px solid var(--line); color:var(--ink);
+    padding:12px 14px; border-radius:var(--radius); font-family:'Inter', sans-serif; font-size:14px;
+  }
+  .field input:focus, .field textarea:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:var(--gold);}
+  .field textarea{min-height:120px; resize:vertical;}
+  .submit-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; padding:13px 26px; background:var(--gold);
+    color:#1a1425; border:none; border-radius:var(--radius); cursor:pointer; font-weight:500; transition:.2s;
+  }
+  .submit-btn:hover{background:#e3c07f;}
+  .form-note{margin-top:14px; font-size:13px; color:var(--teal); font-family:'IBM Plex Mono', monospace; min-height:18px;}
+  .direct-lines{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:28px;}
+  .direct-lines h3{font-size:18px; margin-bottom:12px;}
+  .direct-lines p{color:var(--ink-dim); font-size:14px; margin-bottom:20px;}
+  .contact-links{display:flex; flex-direction:column; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:13px;}
+  .contact-links a{color:var(--ink); display:flex; align-items:center; gap:10px;}
+  .contact-links a:hover{color:var(--gold);}
+
+  footer{padding:30px 7vw; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  @media (max-width:900px){
+    nav.links{display:none;}
+    .nav-toggle{display:flex;}
+    .hero, .about-grid, .contact-wrap{grid-template-columns:1fr; gap:40px;}
+    .stats-strip{grid-template-columns:repeat(2,1fr);}
+    .stat-cell:nth-child(2){border-right:none;}
+    .skill-groups, .services-grid{grid-template-columns:1fr 1fr;}
+    .achieve-grid{grid-template-columns:1fr 1fr;}
+    section{padding:70px 6vw;}
+  }
+  @media (max-width:560px){
+    .skill-groups, .services-grid, .achieve-grid{grid-template-columns:1fr;}
+    .stats-strip{grid-template-columns:1fr 1fr;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">VS <span>Sushma Swaraj</span></div>
+  <nav class="links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="nav-cta" href="#contact">Let's Talk</a>
+</header>
+
+<!-- HERO -->
+<section id="hero" style="border-bottom:none; padding-bottom:0;">
+  <div class="hero">
+    <div class="hero-text">
+      <div class="badge"><span class="pulse"></span> Available for Work</div>
+      <h1>Hi, I'm<br>Sushma Swaraj<span class="role">.</span></h1>
+      <div class="subline">AI &amp; Data Science · 4th Year B.Tech · Java Full Stack Developer</div>
+      <p class="desc">I am Veluru Sushma Swaraj, a B.Tech Artificial Intelligence &amp; Data Science student passionate about software development, building projects with Java and SQL.</p>
+      <div class="btn-row">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn ghost" href="#contact">Contact</a>
+        <a class="btn ghost" href="https://github.com/sushmaswaraj2005" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="hero-portrait">
+      <div class="portrait-frame">
+        <img src="images/profile.jpg" alt="Portrait of Veluru Sushma Swaraj">
+        <div class="placeholder" style="display:none;">Drop your photo in as<br>photo.jpg</div>
+      </div>
+      <div class="scroll-cue">SCROLL ↓</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:60px;">
+  <div class="stats-strip">
+    <div class="stat-cell"><div class="stat-num" data-count="2">0</div><div class="stat-label">PROJECTS COMPLETED</div></div>
+    <div class="stat-cell"><div class="stat-num" data-count="5">0</div><div class="stat-label">TECHNOLOGIES</div></div>
+    <div class="stat-cell"><div class="stat-num" data-count="1">0</div><div class="stat-label">INTERNSHIPS</div></div>
+    <div class="stat-cell"><div class="stat-num" data-count="1">0</div><div class="stat-label">CERTIFICATES</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <span class="eyebrow">About</span>
+      <h2 style="font-size:clamp(28px,3.2vw,42px); margin-bottom:24px;">Building with Java, SQL, and curiosity.</h2>
+      <p>I'm <strong>Veluru Sushma Swaraj</strong>, a B.Tech Artificial Intelligence &amp; Data Science student passionate about software development.</p>
+      <p>I enjoy building projects with <strong>Java</strong> and <strong>SQL</strong> skills, and I'm currently focused on growing as a full stack developer.</p>
+    </div>
+    <div>
+      <span class="eyebrow">Quick Facts</span>
+      <p style="color:var(--ink-dim); margin-bottom:12px;">— B.Tech, AI &amp; Data Science</p>
+      <p style="color:var(--ink-dim); margin-bottom:12px;">— Annamacharya Institute of Technology and Sciences</p>
+      <p style="color:var(--ink-dim); margin-bottom:12px;">— 4th Year · CGPA 8.8</p>
+      <p style="color:var(--ink-dim);">— Rajampet, Andhra Pradesh</p>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-head">
+    <span class="eyebrow">Technologies · Work With</span>
+    <h2>Tools I reach for daily.</h2>
+    <p>A stack built across the full pipeline — from modeling to the pixel on screen.</p>
+  </div>
+  <div class="skill-groups">
+    <div class="skill-group">
+      <h4>Programming</h4>
+      <div class="skill-tags"><span class="skill-tag">Java</span><span class="skill-tag">SQL</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>Web</h4>
+      <div class="skill-tags"><span class="skill-tag">HTML</span><span class="skill-tag">CSS</span><span class="skill-tag">JavaScript</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>Focus Area</h4>
+      <div class="skill-tags"><span class="skill-tag">Full Stack Development</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="timeline-head">
+    <div class="section-head" style="margin-bottom:0;">
+      <span class="eyebrow">Education</span>
+      <h2>Academic background.</h2>
+    </div>
+  </div>
+  <div class="carousel-track" id="edu-track">
+    <div class="timeline-card">
+      <span class="status-pill">In Progress</span>
+      <h4>B.Tech — Artificial Intelligence &amp; Data Science</h4>
+      <div class="org">Annamacharya Institute of Technology and Sciences</div>
+      <p>4th year B.Tech specializing in AI &amp; Data Science.</p>
+      <div class="meta"><span>🎓 CGPA: 8.8</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="timeline-head">
+    <div class="section-head" style="margin-bottom:0;">
+      <span class="eyebrow">Experience</span>
+      <h2>Work &amp; activities.</h2>
+    </div>
+  </div>
+  <div class="carousel-track" id="exp-track">
+    <div class="timeline-card">
+      <span class="status-pill">Certified ✓</span>
+      <h4>Cyber Defence &amp; Security Analyst</h4>
+      <div class="org">Internship</div>
+      <p>Completed an internship as a Cyber Defence and Security Analyst.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-head">
+    <span class="eyebrow">🚀 Featured Work</span>
+    <h2>Projects Gallery</h2>
+    <p>Projects built with Java, HTML, CSS, and JavaScript.</p>
+  </div>
+  <div class="filter-row" id="filter-row">
+    <button class="filter-pill active" data-filter="all">All Projects</button>
+    <button class="filter-pill" data-filter="web">Web Dev</button>
+    <button class="filter-pill" data-filter="java">Java</button>
+  </div>
+  <div class="projects-grid" id="projects-grid">
+    <div class="project-card" data-cat="web">
+      <div class="project-thumb"><img src="images/library-management.png" alt="Library Management System"></div>
+      <div class="project-body">
+        <div class="project-cat">Web Dev</div>
+        <h3>Library Management System</h3>
+        <p>A system to manage library records built with HTML, CSS, and JavaScript.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+      </div>
+    </div>
+    <div class="project-card" data-cat="java">
+      <div class="project-thumb"><img src="images/flappy-bird.png" alt="Flappy Bird"></div>
+      <div class="project-body">
+        <div class="project-cat">Java</div>
+        <h3>Flappy Bird</h3>
+        <p>A recreation of the classic Flappy Bird game built in Java.</p>
+        <div class="stack"><span>Java</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div>
+      <span class="eyebrow">Contact</span>
+      <h2 style="font-size:clamp(28px,3.2vw,42px); margin-bottom:16px;">Let's build something.</h2>
+      <p style="color:var(--ink-dim); margin-bottom:34px;">Open to internships, full-time roles, and interesting problems.</p>
+      <form id="contact-form">
+        <div class="field"><label for="name">NAME</label><input id="name" type="text" required></div>
+        <div class="field"><label for="email">EMAIL</label><input id="email" type="email" required></div>
+        <div class="field"><label for="message">MESSAGE</label><textarea id="message" required></textarea></div>
+        <button class="submit-btn" type="submit">Send Message</button>
+        <div class="form-note" id="form-note"></div>
+      </form>
+    </div>
+    <div class="direct-lines">
+      <h3>Direct lines</h3>
+      <p>The fastest way to reach me is email — I check it daily and reply within 24 hours.</p>
+      <div class="contact-links">
+        <a href="mailto:velurusushma45@gmail.com">✉ velurusushma45@gmail.com</a>
+        <a href="tel:+917207947294">☎ +91 72079 47294</a>
+        <a href="https://maps.google.com/?q=Rajampet,Andhra+Pradesh" target="_blank" rel="noopener">📍 Rajampet, Andhra Pradesh</a>
+        <a href="https://github.com/sushmaswaraj2005" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/veluru-sushma-7b94b53b7/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© <span id="year"></span> Veluru Sushma Swaraj. Built with intent.</span>
+  <span>Made with vanilla HTML / CSS / JS</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Contact form (swap for Netlify Forms / Formspree in production)
+  document.getElementById('contact-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('form-note').textContent = '> message queued — connect a form backend to actually send this.';
+    this.reset();
+  });
+
+  // Animated stat counters, triggered once visible
+  const counters = document.querySelectorAll('.stat-num');
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        let current = 0;
+        const step = Math.max(1, Math.round(target / 40));
+        const tick = () => {
+          current += step;
+          if(current >= target){ el.textContent = target + '+'; return; }
+          el.textContent = current;
+          requestAnimationFrame(tick);
+        };
+        tick();
+        counterObserver.unobserve(el);
+      }
+    });
+  }, {threshold:0.4});
+  counters.forEach(c => counterObserver.observe(c));
+
+  // Project filtering
+  const filterRow = document.getElementById('filter-row');
+  const projectCards = document.querySelectorAll('#projects-grid .project-card');
+  filterRow.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-pill');
+    if(!btn) return;
+    filterRow.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    projectCards.forEach(card => {
+      card.style.display = (filter === 'all' || card.dataset.cat === filter) ? '' : 'none';
+    });
+  });
+
+  // Timeline carousel arrows
+  document.querySelectorAll('.arrow-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const track = document.getElementById(btn.dataset.target);
+      const dir = parseInt(btn.dataset.dir, 10);
+      track.scrollBy({left: dir * 360, behavior:'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>
